@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.O.S. Culinária Universitária | Receitas Fáceis</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ==========================================
+           1. VARIÁVEIS DE ESTILO E CSS RESET
+           ========================================== */
+        :root {
+            --primary-color: #ff6b6b;
+            --primary-hover: #ff5252;
+            --secondary-color: #4ecdc4;
+            --bg-color: #f7f9fc;
+            --card-bg: #ffffff;
+            --text-color: #2d3436;
+            --text-muted: #636e72;
+            --border-radius: 12px;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e;
+            --card-bg: #16213e;
+            --text-color: #e94560;
+            --text-color: #f1f1f1;
+            --text-muted: #a2a8d3;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        /* ==========================================
+           2. CABEÇALHO E NAVEGAÇÃO
+           ========================================== */
+        header {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ==========================================
+           3. FILTROS E BUSCA
+           ========================================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .controls-section {
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border-radius: 25px;
+            border: 2px solid #e0e0e0;
+            outline: none;
+            font-size: 1rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-filter {
+            background: var(--card-bg);
+            border: 2px solid #e0e0e0;
+            color: var(--text-color);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-filter.active, .btn-filter:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* ==========================================
+           4. GRID DE RECEITAS
+           ========================================== */
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .recipe-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .recipe-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .recipe-tag {
+            align-self: flex-start;
+            background-color: rgba(78, 205, 196, 0.2);
+            color: var(--secondary-color);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .recipe-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .recipe-info {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .btn-view {
+            margin-top: auto;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .btn-view:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* ==========================================
+           5. MODAL DETALHADO DA RECEITA
+           ========================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+            position: relative;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .servings-calculator {
+            background: rgba(0,0,0,0.03);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .servings-calculator button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .timer-box {
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        [data-theme="dark"] .timer-box {
+            background: #0d47a1;
+            color: #e3f2fd;
+        }
+
+        .btn-timer {
+            background: #0d47a1;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        [data-theme="dark"] .btn-timer {
+            background: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <header>
+        <button class="theme-toggle" id="themeToggle"><i class="fas font-moon"></i> 🌓 Modo</button>
+        <h1><i class="fas font-utensils"></i> S.O.S. Culinária Universitária</h1>
+        <p>Receitas baratas, rápidas e à prova de erros para não passar fome!</p>
+    </header>
+
+    <div class="container">
+        <!-- BUSCA E FILTROS -->
+        <section class="controls-section">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por ingrediente ou nome...">
+            </div>
+            <div class="categories">
+                <button class="btn-filter active" data-category="all">Todas</button>
+                <button class="btn-filter" data-category="rapido">⚡ Lanches Rápidos</button>
+                <button class="btn-filter" data-category="doce">🍩 Doces Simples</button>
+                <button class="btn-filter" data-category="pratico">🍲 Pratos Principais</button>
+            </div>
+        </section>
+
+        <!-- GRID DE RECEITAS -->
+        <main class="recipes-grid" id="recipesGrid">
+            <!-- Renderizado via JavaScript -->
+        </main>
+    </div>
+
+    <!-- MODAL DE DETALHES DA RECEITA -->
+    <div class="modal-overlay" id="recipeModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div id="modalBody">
+                <!-- Conteúdo Injetado dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- LÓGICA JAVASCRIPT -->
+    <script>
+        // BD DE RECEITAS (Fácil expansão)
+        const recipes = [
+            {
+                id: 1,
+                title: "Macarrão de Caneca no Micro-ondas",
+                category: "rapido",
+                time: "5 min",
+                cost: "R$ 4,00",
+                image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=500&auto=format&fit=crop&q=60",
+                ingredients: [
+                    { name: "Macarrão parafuso", baseQty: 50, unit: "g" },
+                    { name: "Água", baseQty: 120, unit: "ml" },
+                    { name: "Leite", baseQty: 30, unit: "ml" },
+                    { name: "Queijo ralado", baseQty: 40, unit: "g" },
+                    { name: "Sal e Pimenta", baseQty: 1, unit: "pitada" }
+                ],
+                instructions: [
+                    "Em uma caneca alta, coloque o macarrão e a água. Leve ao micro-ondas por 3 minutos.",
+                    "Retire com cuidado, jogue o excesso de água se houver.",
+                    "Adicione o leite, o queijo, o sal e a pimenta. Misture bem.",
+                    "Volte ao micro-ondas por mais 1 minuto até o queijo derreter e aproveite!"
+                ],
+                timer: 240 // em segundos (4 minutos totais)
+            },
+            {
+                id: 2,
+                title: "Brigadeiro de Colher de Micro-ondas",
+                category: "doce",
+                time: "8 min",
+                cost: "R$ 6,00",
+                image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=500&auto=format&fit=crop&q=60",
+                ingredients: [
+                    { name: "Leite Condensado", baseQty: 1, unit: "lata" },
+                    { name: "Achocolatado ou Cacau", baseQty: 3, unit: "colheres de sopa" },
+                    { name: "Manteiga", baseQty: 1, unit: "colher de sopa" }
+                ],
+                instructions: [
+                    "Em um recipiente fundo próprio para micro-ondas, misture todos os ingredientes.",
+                    "Leve ao micro-ondas na potência alta por 3 minutos.",
+                    "Retire, mexa bem e coloque por mais 2 minutos.",
+                    "Cuidado ao retirar pois estará muito quente. Espere esfriar um pouco e coma na colher!"
+                ],
+                timer: 300
+            },
+            {
+                id: 3,
+                title: "Omelete Turbinado de Frigideira",
+                category: "pratico",
+                time: "10 min",
+                cost: "R$ 5,00",
+                image: "https://images.unsplash.com/photo-1510693206972-df098062cb71?w=500&auto=format&fit=crop&q=60",
+                ingredients: [
+                    { name: "Ovos", baseQty: 2, unit: "unidades" },
+                    { name: "Presunto picado", baseQty: 1, unit: "fatia" },
+                    { name: "Queijo mussarela", baseQty: 1, unit: "fatia" },
+                    { name: "Tomate picado", baseQty: 0.5, unit: "unidade" },
+                    { name: "Orégano e Sal", baseQty: 1, unit: "pitada" }
+                ],
+                instructions: [
+                    "Bata os ovos em um prato com o garfo até ficar homogêneo.",
+                    "Tempere com sal e orégano.",
+                    "Aqueça uma frigideira com um fio de óleo ou manteiga.",
+                    "Despeje os ovos, adicione o recheio de um lado, dobre ao meio e doure dos dois lados."
+                ],
+                timer: 600
+            },
+            {
+                id: 4,
+                title: "Crepioca Recheada Rapidinha",
+                category: "rapido",
+                time: "7 min",
+                cost: "R$ 3,50",
+                image: "https://images.unsplash.com/photo-1626844131082-256783844137?w=500&auto=format&fit=crop&q=60",
+                ingredients: [
+                    { name: "Goma de Tapioca", baseQty: 2, unit: "colheres de sopa" },
+                    { name: "Ovo", baseQty: 1, unit: "unidade" },
+                    { name: "Recheio a gosto (Requeijão/Frango)", baseQty: 2, unit: "colheres" }
+                ],
+                instructions: [
+                    "Misture o ovo e a tapioca em uma tigela até dissolver bem.",
+                    "Despeje em frigideira antiaderente pré-aquecida.",
+                    "Quando soltar do fundo, vire, coloque o recheio, dobre e sirva."
+                ],
+                timer: 420
+            }
+        ];
+
+        // VARIÁVEIS DE ESTADO
+        let currentServings = 1;
+        let timerInterval = null;
+
+        // ELEMENTOS DO DOM
+        const recipesGrid = document.getElementById('recipesGrid');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.btn-filter');
+        const recipeModal = document.getElementById('recipeModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalBody = document.getElementById('modalBody');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // RENDERIZAR CARDS DE RECEITAS
+        function renderRecipes(recipesToRender) {
+            recipesGrid.innerHTML = '';
+            
+            if(recipesToRender.length === 0) {
+                recipesGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">Nenhuma receita encontrada para sua busca... 😢</p>`;
+                return;
+            }
+
+            recipesToRender.forEach(recipe => {
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.innerHTML = `
+                    <img src="${recipe.image}" alt="${recipe.title}" class="recipe-img">
+                    <div class="recipe-content">
+                        <span class="recipe-tag">${recipe.category}</span>
+                        <h3 class="recipe-title">${recipe.title}</h3>
+                        <div class="recipe-info">
+                            <span><i class="far fa-clock"></i> ${recipe.time}</span>
+                            <span><i class="fas fa-coins"></i> ~${recipe.cost}</span>
+                        </div>
+                        <button class="btn-view" onclick="openRecipeModal(${recipe.id})">Ver Receita</button>
+                    </div>
+                `;
+                recipesGrid.appendChild(card);
+            });
+        }
+
+        // ABRIR MODAL COM DETALHES E CALCULADORA
+        window.openRecipeModal = function(id) {
+            const recipe = recipes.find(r => r.id === id);
+            currentServings = 1;
+
+            updateModalContent(recipe);
+            recipeModal.classList.add('active');
+        };
+
+        function updateModalContent(recipe) {
+            modalBody.innerHTML = `
+                <h2>${recipe.title}</h2>
+                <hr style="margin: 10px 0; border: none; border-top: 1px solid #eee;">
+                
+                <div class="servings-calculator">
+                    <span><strong>Porções:</strong></span>
+                    <button onclick="changeServings(${recipe.id}, -1)">-</button>
+                    <span id="servingsCount">${currentServings}</span>
+                    <button onclick="changeServings(${recipe.id}, 1)">+</button>
+                </div>
+
+                <h3>Ingredientes:</h3>
+                <ul>
+                    ${recipe.ingredients.map(ing => `
+                        <li><strong>${(ing.baseQty * currentServings).toFixed(1).replace('.0', '')} ${ing.unit}</strong> de ${ing.name}</li>
+                    `).join('')}
+                </ul>
+
+                <h3>Modo de Preparo:</h3>
+                <ol>
+                    ${recipe.instructions.map(inst => `<li>${inst}</li>`).join('')}
+                </ol>
+
+                <div class="timer-box">
+                    <div>
+                        <i class="fas fa-stopwatch fa-2x"></i>
+                        <span id="timerDisplay" style="font-size: 1.2rem; font-weight: bold; margin-left: 10px;">
+                            ${formatTime(recipe.timer)}
+                        </span>
+                    </div>
+                    <button class="btn-timer" onclick="startTimer(${recipe.timer})">Iniciar Cronômetro</button>
+                </div>
+            `;
+        }
+
+        // AJUSTAR PORÇÕES
+        window.changeServings = function(recipeId, change) {
+            if (currentServings + change >= 1) {
+                currentServings += change;
+                const recipe = recipes.find(r => r.id === recipeId);
+                updateModalContent(recipe);
+            }
+        }
+
+        // CRONÔMETRO
+        window.startTimer = function(seconds) {
+            clearInterval(timerInterval);
+            let timeRemaining = seconds;
+            const display = document.getElementById('timerDisplay');
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                display.innerText = formatTime(timeRemaining);
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    display.innerText = "PRONTO! 🔔";
+                    alert("Sua receita está pronta! Cuidado para não queimar a língua!");
+                }
+            }, 1000);
+        };
+
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // FECHAR MODAL
+        closeModal.onclick = () => {
+            recipeModal.classList.remove('active');
+            clearInterval(timerInterval);
+        };
+
+        // FILTROS DE PESQUISA E CATEGORIA
+        function filterRecipes() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeCategory = document.querySelector('.btn-filter.active').dataset.category;
+
+            const filtered = recipes.filter(recipe => {
+                const matchesSearch = recipe.title.toLowerCase().includes(searchTerm) || 
+                                     recipe.ingredients.some(i => i.name.toLowerCase().includes(searchTerm));
+                const matchesCategory = activeCategory === 'all' || recipe.category === activeCategory;
+
+                return matchesSearch && matchesCategory;
+            });
+
+            renderRecipes(filtered);
+        }
+
+        searchInput.addEventListener('input', filterRecipes);
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterRecipes();
+            });
+        });
+
+        // MODO ESCURO
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        });
+
+        // INICIALIZAÇÃO
+        renderRecipes(recipes);
+    </script>
+</body>
+</html>
